@@ -89,3 +89,4 @@ RUN echo "dev:root" | chpasswd
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 RUN service ssh restart
+EXPOSE 22

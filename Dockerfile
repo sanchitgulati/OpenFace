@@ -55,18 +55,16 @@ RUN apt-get install -qq -y libopencv-dev
 ## ==================== Installing Python ===========================
 # Update the package index and install Python 3
 RUN apt-get update && \
-    apt-get install -qq -y python3 python3-pip
+    apt-get install -qq -y python3 python3-pip python3-dev
 # Set Python 3 as the default version
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-
 RUN pip3 install --upgrade pip
-RUN pip3 install numpy pandas matplotlib seaborn scikit-learn tensorflow keras torch opencv-contrib-python dlib mediapipe
+# RUN pip3 install numpy pandas matplotlib seaborn scikit-learn tensorflow keras torch opencv-contrib-python dlib mediapipe
 
 
 ## ==================== Debuggin Tools ===========================
 
-Run apt-get install -qq -y vim
-Run apt-get install -qq -y htop
+Run apt-get install -qq -y vim nano htop
 
 ## ==================== Building OpenFace ===========================
 FROM cv_deps as openface
@@ -82,7 +80,10 @@ RUN mkdir -p build && cd build && \
     ninja &&\
     ninja install
 
-# RUN git clone repo
-# ./build.sh
-
+RUN pip install virtualenv
+RUN mkdir jupyter && cd jupyter
+RUN virtualenv env
+SHELL ["/bin/bash", "-c", "source env/bin/activate"]
+RUN pip install --upgrade pip
 RUN pip install jupyter
+ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root"]

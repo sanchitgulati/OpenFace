@@ -48,10 +48,9 @@ RUN apt-get update -qq && apt-get install -qq -y \
 ## ==================== dlib libopencv openblas  ===========================
 
 RUN apt-get install -qq -y build-essential cmake git pkg-config 
-RUN apt-get install -qq -y libopenblas-dev
+RUN apt-get install -qq -y libopenblas-dev gfortran
 RUN apt-get install -qq -y libdlib-dev
-RUN apt-get install -qq -y libopencv-dev
-
+RUN apt-get install -qq -y libopencv-dev  
 
 ## ==================== Installing Python ===========================
 # Update the package index and install Python 3
@@ -83,10 +82,7 @@ RUN mkdir -p build && cd build && \
     ninja &&\
     ninja install
 
-RUN apt-get update && apt-get install -y openssh-server
-RUN useradd -m -d /home/dev -s /bin/bash dev
-RUN echo "dev:root" | chpasswd
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-RUN service ssh restart
-EXPOSE 22
+# RUN git clone repo
+# ./build.sh
+
+RUN pip install jupyter

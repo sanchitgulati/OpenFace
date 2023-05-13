@@ -36,7 +36,6 @@
 
 // Local includes
 
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -85,7 +84,6 @@ std::vector<std::string> get_arguments(int argc, char **argv)
 	}
 	return arguments;
 }
-
 
 int Predict(std::vector<std::string> arguments)
 {
@@ -256,8 +254,6 @@ int Predict(std::vector<std::string> arguments)
 		if (recording_params.outputAUs())
 		{
 			INFO_STREAM("Postprocessing the Action Unit predictions");
-			INFO_STREAM("open_face_rec.GetCSVFile()");
-			INFO_STREAM(open_face_rec.GetCSVFile());
 			face_analyser.PostprocessOutputFile(open_face_rec.GetCSVFile());
 		}
 
@@ -269,29 +265,42 @@ int Predict(std::vector<std::string> arguments)
 	return 0;
 }
 
-
-std::string PredictImage(std::string in_filename){
+std::string PredictImage(const char *in_filename)
+{
 	std::vector<std::string> arguments;
-    arguments.push_back("-f");
-    arguments.push_back(std::string(in_filename)); 
-	Predict(arguments);
-	std::string out_name;
-	// From the filename, strip out the name without directory and extension
-	if (fs::is_directory(in_filename))
+	arguments.push_back("-f");
+	arguments.push_back(std::string(in_filename));
+	if (Predict(arguments) == 0) // Predict returns 0 on success
 	{
-		out_name = fs::canonical(in_filename).filename().string();
-	}
-	else
-	{
-		out_name = fs::path(in_filename).filename().replace_extension("").string();
-	}
+		std::string out_name;
+		// From the filename, strip out the name without directory and extension
+		if (fs::is_directory(in_filename))
+		{
+			out_name = fs::canonical(in_filename).filename().string();
+		}
+		else
+		{
+			out_name = fs::path(in_filename).filename().replace_extension("").string();
+		}
 
-	std::ifstream input_file("processed/"+out_name+".csv");
-    std::string file_contents((std::istreambuf_iterator<char>(input_file)),
-                              std::istreambuf_iterator<char>());
-	return file_contents;
+		std::string out_filename = "processed/"+out_name+".csv";
+		std::ifstream file(out_filename);
+		if (!file)
+		{
+			ERROR_STREAM("Failed to open file "+out_filename+".\n");
+			return "Failed to open file.";
+		}
+
+		std::stringstream buffer;
+		buffer << file.rdbuf();
+
+		std::string file_contents = buffer.str();
+
+		file.close();
+		return file_contents;
+	}
+	return "No Face Detected.";
 }
-
 
 int main(int argc, char **argv)
 {
@@ -310,8 +319,10 @@ int main(int argc, char **argv)
 }
 
 // C wrapper API for the add() function
-extern "C" {
-    std::string PredictImage_wrapper(std::string filepath) {
-        return PredictImage(filepath);
-    }
+extern "C"
+{
+	const char *PredictImageExtern(const char *filepath)
+	{
+		return PredictImage(filepath).c_str();
+	}
 }

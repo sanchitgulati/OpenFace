@@ -87,3 +87,12 @@ RUN mkdir -p build && cd build && \
 # RUN pip install --upgrade pip
 # RUN pip install jupyter
 # ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
+# jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root
+
+# pip install virtualenv \
+#     && mkdir jupyter && cd jupyter \
+#     && virtualenv env \
+#     && source env/bin/activate \
+#     && pip install --upgrade pip \
+#     && pip install jupyter \
+#     && jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root

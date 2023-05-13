@@ -26,7 +26,7 @@ SET(HEADERS
 	include/SVR_static_lin_regressors.h
 )
 
-
+add_compile_options(-fPIC)
 add_library( FaceAnalyser ${SOURCE} ${HEADERS})
 add_library( OpenFace::FaceAnalyser ALIAS FaceAnalyser)
 

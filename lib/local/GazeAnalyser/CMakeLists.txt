@@ -11,7 +11,7 @@ SET(SOURCE
 SET(HEADERS
     include/GazeEstimation.h
 )
-
+add_compile_options(-fPIC)
 add_library( GazeAnalyser ${SOURCE} ${HEADERS})
 add_library( OpenFace::GazeAnalyser ALIAS GazeAnalyser)
 

@@ -1,0 +1,10 @@
+# Local libraries
+include_directories(${LandmarkDetector_SOURCE_DIR}/include)
+	
+add_library(FeatureExtractionLib SHARED FeatureExtractionLib.cpp)
+target_link_libraries(FeatureExtractionLib LandmarkDetector)
+target_link_libraries(FeatureExtractionLib FaceAnalyser)
+target_link_libraries(FeatureExtractionLib GazeAnalyser)
+target_link_libraries(FeatureExtractionLib Utilities)
+add_compile_options(-fPIC)
+install (TARGETS FeatureExtractionLib DESTINATION lib)

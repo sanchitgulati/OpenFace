@@ -23,6 +23,7 @@ SET(HEADERS
 	include/ConcurrentQueue.h
 )
 
+add_compile_options(-fPIC)
 add_library( Utilities ${SOURCE} ${HEADERS})
 add_library( OpenFace::Utilities ALIAS Utilities)
 

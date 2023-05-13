@@ -36,7 +36,7 @@ SET(HEADERS
 	include/SVR_patch_expert.h		
 	include/stdafx.h
 )
-
+add_compile_options(-fPIC)
 add_library( LandmarkDetector ${SOURCE} ${HEADERS} )
 add_library( OpenFace::LandmarkDetector ALIAS LandmarkDetector)
 

@@ -1,7 +1,8 @@
 # OpenFace 2.2.0: a facial behavior analysis toolkit
 
 ## Forked and Updated to ubuntu:22.10
-### Added FeatureExtractionLib, so it can be imported to python directly
+**Added FeatureExtractionLib, so it can be imported to python directly**
+**Check jupyter notebook for usage**
 
 OpenFace was originally developed by Tadas Baltrušaitis in collaboration with CMU MultiComp Lab led by Prof. Louis-Philippe Morency. Some of the original algorithms were created while at Rainbow Group, Cambridge University. The OpenFace library is still actively developed at the CMU MultiComp Lab in collaboration with Tadas Baltršaitis. Special thanks to researcher who helped developing, implementing and testing the algorithms present in OpenFace: Amir Zadeh and Yao Chong Lim on work on the CE-CLM model and Erroll Wood for the gaze estimation work.
 

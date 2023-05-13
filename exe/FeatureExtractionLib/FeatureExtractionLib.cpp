@@ -265,43 +265,6 @@ int Predict(std::vector<std::string> arguments)
 	return 0;
 }
 
-std::string PredictImage(const char *in_filename)
-{
-	std::vector<std::string> arguments;
-	arguments.push_back("-f");
-	arguments.push_back(std::string(in_filename));
-	if (Predict(arguments) == 0) // Predict returns 0 on success
-	{
-		std::string out_name;
-		// From the filename, strip out the name without directory and extension
-		if (fs::is_directory(in_filename))
-		{
-			out_name = fs::canonical(in_filename).filename().string();
-		}
-		else
-		{
-			out_name = fs::path(in_filename).filename().replace_extension("").string();
-		}
-
-		std::string out_filename = "processed/"+out_name+".csv";
-		std::ifstream file(out_filename);
-		if (!file)
-		{
-			ERROR_STREAM("Failed to open file "+out_filename+".\n");
-			return "Failed to open file.";
-		}
-
-		std::stringstream buffer;
-		buffer << file.rdbuf();
-
-		std::string file_contents = buffer.str();
-
-		file.close();
-		return file_contents;
-	}
-	return "No Face Detected.";
-}
-
 int main(int argc, char **argv)
 {
 
@@ -321,8 +284,19 @@ int main(int argc, char **argv)
 // C wrapper API for the add() function
 extern "C"
 {
-	const char *PredictImageExtern(const char *filepath)
+	void PredictFile(const char *filepath)
 	{
-		return PredictImage(filepath).c_str();
+		std::vector<std::string> arguments;
+		arguments.push_back("-f");
+		arguments.push_back(std::string(filepath));
+		Predict(arguments);
+	}
+
+	void PredictFolder(const char *folderPath)
+	{
+		std::vector<std::string> arguments;
+		arguments.push_back("-fdir");
+		arguments.push_back(std::string(folderPath));
+		Predict(arguments);
 	}
 }
